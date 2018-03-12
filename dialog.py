@@ -21,6 +21,7 @@ QUOTE_STYLES = {
     'angle': ('«', '»'),
     'angle-reverse': ('»', '«'),
     'dash': ('-', '-'),
+    'double-dash': ('--', '--'),
 }
 
 ALTERNATES = {
