@@ -57,7 +57,7 @@ def paragraphs(tree):
     return paragraphs
 
 
-def tag_dialog(paragraph, quotation_style):
+def tag_dialog(paragraph, quotation_style, use_alternates=False):
     in_dialog = False  # current state of loop
     dialog = False  # have we found any dialog fragment in paragraph
 
@@ -99,7 +99,7 @@ def tag_dialog(paragraph, quotation_style):
 
     # similar delimiters that might be wrongly entered
     left_alt, right_alt = None, None
-    if quotation_style in ALTERNATES:
+    if use_alternates and quotation_style in ALTERNATES:
         left_alt, right_alt = QUOTE_STYLES[ALTERNATES[quotation_style]]
 
     symmetric = left == right
@@ -165,7 +165,7 @@ def print_yellow(*args):
     print('\033[93m', *args, '\033[0m')
 
 
-def process_file(filename, print_all=False, write=False):
+def process_file(filename, print_all=False, write=False, use_alternates=False):
     found = False
 
     print('File:', filename)
@@ -175,7 +175,7 @@ def process_file(filename, print_all=False, write=False):
     tree = read_xml(filename)
 
     for style in QUOTE_STYLES.keys():
-        processed = [tag_dialog(p, style)
+        processed = [tag_dialog(p, style, use_alternates)
                      for p in paragraphs(tree)]
 
         has_dialog = [p for p in processed if p[1]]
@@ -204,7 +204,7 @@ def process_file(filename, print_all=False, write=False):
             # probably wrong choice
             continue
 
-        processed = [tag_dialog(p, style)
+        processed = [tag_dialog(p, style, use_alternates)
                      for p in paragraphs(tree)]
 
         has_dialog = [p for p in processed if p[1]]
@@ -240,15 +240,14 @@ def process_file(filename, print_all=False, write=False):
 
 def main(args):
     parser = optparse.OptionParser()
-    parser.add_option("-p", "--print", action='store_true',
-                      dest="print_all", default=False)
-    parser.add_option("-w", "--write", action='store_true',
-                      dest="write", default=False)
+    parser.add_option("-p", "--print", action='store_true', dest="print_all", default=False)
+    parser.add_option("-w", "--write", action='store_true', dest="write", default=False)
+    parser.add_option("-a", "--use_alternates", action='store_true', dest="use_alternates", default=False)
 
     options, args = parser.parse_args()
 
     for filename in args:
-        process_file(filename, options.print_all, options.write)
+        process_file(filename, options.print_all, options.write, options.use_alternates)
 
 
 if __name__ == '__main__':
