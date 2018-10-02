@@ -233,7 +233,7 @@ def process_file(filename, print_all=False, write=False, use_alternates=False):
 
         if write:
             out_filename = filename.replace('.xml', '.dialog.xml')
-            tree.write(open(out_filename, 'wb'))
+            tree.write(open(out_filename, 'wb'), encoding='utf-8', pretty_print=True, xml_declaration=True)
             print('Saved to: %s' % out_filename)
 
         break
@@ -258,4 +258,4 @@ if __name__ == '__main__':
     if sys.version_info < (3, 0):
         print('Please run using Python 3!')
     else:
-        main(sys.argv)
+        main()
