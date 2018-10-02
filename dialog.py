@@ -124,6 +124,8 @@ def tag_dialog(paragraph, quotation_style, use_alternates=False):
                     if in_dialog:
                         close_dialog()
                     else:
+                        node.attrib['dialog'] = '1.0'
+                        dialog_nodes.append(node)
                         open_dialog()
 
                 else:
@@ -135,6 +137,8 @@ def tag_dialog(paragraph, quotation_style, use_alternates=False):
                         # as we are already in a dialog,
                         # better close and reopen
                         close_dialog(False)
+                    node.attrib['dialog'] = '1.0'
+                    dialog_nodes.append(node)
                     open_dialog()
 
                 elif word == right or (word == right_alt and in_dialog):
@@ -238,7 +242,7 @@ def process_file(filename, print_all=False, write=False, use_alternates=False):
         print('Could not detect quotation style')
 
 
-def main(args):
+def main():
     parser = optparse.OptionParser()
     parser.add_option("-p", "--print", action='store_true', dest="print_all", default=False)
     parser.add_option("-w", "--write", action='store_true', dest="write", default=False)
